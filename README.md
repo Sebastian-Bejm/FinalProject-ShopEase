@@ -1,1 +1,3 @@
-# Security-Capstone
+# Capstone Project: ShopEase App
+
+A blazor application.
