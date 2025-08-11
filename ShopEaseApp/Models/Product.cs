@@ -1,16 +1,15 @@
-namespace EventEaseApp.Models {
-    public class Product {
+namespace ShopEaseApp.Models;
 
-        public int ProductID {get; set;}
+public class Product {
+    public int ProductID {get; set;}
 
-        public string Name {get; set;} = string.Empty;
+    public string Name {get; set;} = string.Empty;
 
-        public decimal Price {get; set;}
+    public decimal Price {get; set;}
 
-        public string Category {get; set;} = string.Empty;
+    public string Category {get; set;} = string.Empty;
 
-        public string GetProductDetails() {
-            return "Product: " + Name + " | Price: " + Price.ToString("0.##") + " | Category: " + Category;
-        }
+    public string GetProductDetails() {
+        return "Product: " + Name + " | Price: " + Price.ToString("0.##") + " | Category: " + Category;
     }
 }

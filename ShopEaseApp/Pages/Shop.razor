@@ -1,0 +1,19 @@
+@page "/shop"
+@using ShopEaseApp.Models
+@using ShopEaseApp.Components
+
+<h3>Shop</h3>
+
+@foreach (var product in products)
+{
+    <ProductCard Product="product" />
+}
+
+@code {
+    private List<Product> products = new()
+    {
+        new Product { ProductID = 1, Name = "Laptop", Price = 999.99m, Category = "Electronics" },
+        new Product { ProductID = 2, Name = "Sneakers", Price = 79.99m, Category = "Footwear" },
+        new Product { ProductID = 3, Name = "Coffee Mug", Price = 12.50m, Category = "Kitchen" }
+    };
+}
