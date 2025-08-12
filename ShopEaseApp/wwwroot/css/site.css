@@ -1,0 +1,18 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+h3 {
+    font-weight: 600;
+    color: #343a40;
+}
+
+.card-title {
+    font-size: 1.25rem;
+}
+
+.modal-content {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}

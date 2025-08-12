@@ -8,8 +8,8 @@
 @if (!CartService.CartItems.Any()) {
     <p>Your cart is empty.</p>
 } else {
-    <table class="table">
-        <thead>
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
             <tr>
                 <th>Product</th>
                 <th>Category</th>
@@ -19,56 +19,61 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var group in CartService.CartItems.GroupBy(p => p.ProductID)) {
+            @foreach (var group in CartService.CartItems.GroupBy(p => p.ProductID))
+            {
                 var product = group.First();
                 var quantity = group.Count();
                 <tr>
-                    <td>@product.Name</td>
+                    <td class="fw-semibold">@product.Name</td>
                     <td>@product.Category</td>
-                    <td>$@product.Price</td>
+                    <td class="text-success">$@product.Price</td>
                     <td>
-                        <input type="number" min="0" value="@quantity" @onchange="e => UpdateQuantity(product, e.Value?.ToString())" class="form-control form-control-sm" style="width: 80px;" />
+                        <input type="number" min="0" value="@quantity"
+                            @onchange="e => UpdateQuantity(product, e.Value?.ToString())"
+                            class="form-control form-control-sm" style="width: 80px;" />
                     </td>
                     <td>
-                        <button class="btn btn-danger btn-sm" @onclick="() => RemoveOne(product.ProductID)">Remove One</button>
-                        <button class="btn btn-warning btn-sm" @onclick="() => PromptRemoveAll(product)">Remove All</button>
-                    </td>
-
-                    @if (showConfirmation && productToRemove != null)
-                    {
-                        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Confirm Removal</h5>
-                                        <button type="button" class="btn-close" @onclick="CloseConfirmation"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        @if (isQuantityZeroTriggered)
-                                        {
-                                            <p>You set the quantity of <strong>@productToRemove.Name</strong> to zero. Do you want to remove it from your cart?</p>
-                                        }
-                                        else
-                                        {
-                                            <p>Are you sure you want to remove all instances of <strong>@productToRemove.Name</strong> from your cart?</p>
-                                        }
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-secondary" @onclick="CloseConfirmation">Cancel</button>
-                                        <button class="btn btn-danger" @onclick="ConfirmRemoveAll">Remove All</button>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-danger btn-sm" @onclick="() => RemoveOne(product.ProductID)">Remove One</button>
+                            <button class="btn btn-warning btn-sm" @onclick="() => PromptRemoveAll(product)">Remove All</button>
                         </div>
-                    }
-
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <div class="mt-3">
-        <strong>Total: $@CartService.CalculateTotal().ToString("0.##")</strong>
+    @if (showConfirmation && productToRemove != null)
+    {
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+            <div class="modal-dialog">
+                <div class="modal-content rounded-3">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Removal</h5>
+                        <button type="button" class="btn-close" @onclick="CloseConfirmation"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if (isQuantityZeroTriggered)
+                        {
+                            <p>You set the quantity of <strong>@productToRemove.Name</strong> to zero. Do you want to remove it from your cart?</p>
+                        }
+                        else
+                        {
+                            <p>Are you sure you want to remove all instances of <strong>@productToRemove.Name</strong> from your cart?</p>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" @onclick="CloseConfirmation">Cancel</button>
+                        <button class="btn btn-danger" @onclick="ConfirmRemoveAll">Remove All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <div class="mt-4 text-end">
+        <h5>Total: <span class="text-success fw-bold">$@CartService.CalculateTotal().ToString("0.##")</span></h5>
     </div>
 }
 

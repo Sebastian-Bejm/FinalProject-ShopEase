@@ -2,14 +2,15 @@
 @using ShopEaseApp.Services
 @inject CartService CartService
 
-<div class="card">
+<div class="card shadow-sm mb-4" style="width: 18rem;">
     <div class="card-body">
-        <h5 class="card-title">@Product.Name</h5>
-        <p class="card-text">Category: @Product.Category</p>
-        <p class="card-text">Price: $@Product.Price</p>
-        <button class="btn btn-primary" @onclick="AddToCart">Add to Cart</button>
+        <h5 class="card-title text-primary fw-bold">@Product.Name</h5>
+        <p class="card-text text-muted mb-1">Category: <span class="fw-semibold">@Product.Category</span></p>
+        <p class="card-text mb-3">Price: <span class="text-success fw-semibold">$@Product.Price</span></p>
+        <button class="btn btn-outline-primary w-100" @onclick="AddToCart">Add to Cart</button>
     </div>
 </div>
+
 
 @code {
     [Parameter]
