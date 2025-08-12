@@ -82,8 +82,6 @@ public class Cart {
                 Console.WriteLine($"Error calculating total: {ex.Message}");
             }
         }
-
-        //Console.WriteLine($"Total Price of Cart: ${total}");
         return total;
     }
 }
