@@ -1,0 +1,8 @@
+USE Shop;
+
+CREATE TABLE IF NOT EXISTS Products (
+    ProductID INT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Price DECIMAL(10,2) NOT NULL,
+    Category VARCHAR(255) NOT NULL
+);
