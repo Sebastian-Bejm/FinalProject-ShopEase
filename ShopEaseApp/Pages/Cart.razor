@@ -27,13 +27,26 @@ else
                     </div>
                     <div class="cart-detail">
                         <strong>Quantity:</strong>
-                        <input type="number" min="0" value="@quantity"
-                               @onchange="e => UpdateQuantity(item.ProductID, e.Value?.ToString())"
-                               class="form-control form-control-sm quantity-input" />
+                        <input type="number"
+                            min="0"
+                            value="@quantity"
+                            @onchange="e => UpdateQuantity(item.ProductID, e.Value?.ToString())"
+                            class="form-control form-control-sm quantity-input"
+                            aria-label="Quantity for @product.Name"
+                            />
                     </div>
                     <div class="cart-actions">
-                        <button class="btn btn-danger btn-sm" @onclick="() => RemoveOne(product.ProductID)">Remove One</button>
-                        <button class="btn btn-warning btn-sm" @onclick="() => PromptRemoveAll(product)">Remove All</button>
+                        <button class="btn btn-danger btn-sm"
+                                @onclick="() => RemoveOne(product.ProductID)"
+                                aria-label="Remove one @product.Name from cart">
+                            Remove One
+                        </button>
+
+                        <button class="btn btn-warning btn-sm"
+                                @onclick="() => PromptRemoveAll(product)"
+                                aria-label="Remove all @product.Name from cart">
+                            Remove All
+                        </button>
                     </div>
                 </div>
             </div>
@@ -42,22 +55,29 @@ else
 
     @if (showConfirmation && productToRemove != null)
     {
-        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal fade show d-block"
+            tabindex="-1"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            style="background-color: rgba(0,0,0,0.5);">
             <div class="modal-dialog">
                 <div class="modal-content rounded-3">
                     <div class="modal-header">
-                        <h5 class="modal-title">Confirm Removal</h5>
-                        <button type="button" class="btn-close" @onclick="CloseConfirmation"></button>
+                        <h5 id="modal-title" class="modal-title">Confirm Removal</h5>
+                        <button type="button" class="btn-close" @onclick="CloseConfirmation" aria-label="Close modal"></button>
                     </div>
                     <div class="modal-body">
-                        @if (isQuantityZeroTriggered)
-                        {
-                            <p>You set the quantity of <strong>@productToRemove.Name</strong> to zero. Do you want to remove it from your cart?</p>
-                        }
-                        else
-                        {
-                            <p>Are you sure you want to remove all instances of <strong>@productToRemove.Name</strong> from your cart?</p>
-                        }
+                        <p>
+                            @if (isQuantityZeroTriggered)
+                            {
+                                <span>You set the quantity of <strong>@productToRemove.Name</strong> to zero. Do you want to remove it from your cart?</span>
+                            }
+                            else
+                            {
+                                <span>Are you sure you want to remove all instances of <strong>@productToRemove.Name</strong> from your cart?</span>
+                            }
+                        </p>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" @onclick="CloseConfirmation">Cancel</button>
@@ -66,6 +86,7 @@ else
                 </div>
             </div>
         </div>
+
     }
 
     <div class="mt-4 text-end">
