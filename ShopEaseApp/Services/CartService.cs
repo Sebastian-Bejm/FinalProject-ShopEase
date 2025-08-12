@@ -15,8 +15,29 @@ public class CartService
 
     public void RemoveProduct(int productId)
     {
-        cart.RemoveAll(p => p.ProductID == productId);
+        var product = cart.FirstOrDefault(p => p.ProductID == productId);
+        if (product != null) {
+            cart.Remove(product);
+        }
     }
+
+    public void SetProductQuantity(Product product, int quantity)
+    {
+        cart.RemoveAll(p => p.ProductID == product.ProductID);
+
+        for (int i = 0; i < quantity; i++)
+        {
+            cart.Add(new Product
+            {
+                ProductID = product.ProductID,
+                Name = product.Name,
+                Price = product.Price,
+                Category = product.Category
+            });
+        }
+    }
+
+
 
     public decimal CalculateTotal()
     {
