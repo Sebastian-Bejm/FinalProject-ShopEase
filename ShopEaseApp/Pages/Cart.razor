@@ -8,40 +8,42 @@
 @if (!CartService.CartItems.Any()) {
     <p>Your cart is empty.</p>
 } else {
-    <table class="table table-bordered table-hover align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>Product</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var group in CartService.CartItems.GroupBy(p => p.ProductID))
-            {
-                var product = group.First();
-                var quantity = group.Count();
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
                 <tr>
-                    <td class="fw-semibold">@product.Name</td>
-                    <td>@product.Category</td>
-                    <td class="text-success">$@product.Price</td>
-                    <td>
-                        <input type="number" min="0" value="@quantity"
-                            @onchange="e => UpdateQuantity(product, e.Value?.ToString())"
-                            class="form-control form-control-sm" style="width: 80px;" />
-                    </td>
-                    <td>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-danger btn-sm" @onclick="() => RemoveOne(product.ProductID)">Remove One</button>
-                            <button class="btn btn-warning btn-sm" @onclick="() => PromptRemoveAll(product)">Remove All</button>
-                        </div>
-                    </td>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var group in CartService.CartItems.GroupBy(p => p.ProductID))
+                {
+                    var product = group.First();
+                    var quantity = group.Count();
+                    <tr>
+                        <td class="fw-semibold">@product.Name</td>
+                        <td>@product.Category</td>
+                        <td class="text-success">$@product.Price</td>
+                        <td>
+                            <input type="number" min="0" value="@quantity"
+                                @onchange="e => UpdateQuantity(product, e.Value?.ToString())"
+                                class="form-control form-control-sm" style="width: 80px;" />
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-danger btn-sm" @onclick="() => RemoveOne(product.ProductID)">Remove One</button>
+                                <button class="btn btn-warning btn-sm" @onclick="() => PromptRemoveAll(product)">Remove All</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
     @if (showConfirmation && productToRemove != null)
     {

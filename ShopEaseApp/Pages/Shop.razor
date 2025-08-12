@@ -2,16 +2,19 @@
 @using ShopEaseApp.Models
 @using ShopEaseApp.Components
 
-<h3 class="mb-4">Shop</h3>
+<div class="container">
+    <h3 class="mb-4">Shop</h3>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    @foreach (var product in products)
-    {
-        <div class="col">
-            <ProductCard Product="product" />
-        </div>
-    }
+    <div class="product-grid">
+        @foreach (var product in products)
+        {
+            <div class="product-card">
+                <ProductCard Product="product" />
+            </div>
+        }
+    </div>
 </div>
+
 
 @code {
     private List<Product> products = new()

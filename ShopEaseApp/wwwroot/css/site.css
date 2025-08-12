@@ -16,3 +16,70 @@ h3 {
 .modal-content {
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
 }
+
+/* Base styles */
+.card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    width: auto; /* Override Bootstrap's fixed width */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .modal-dialog {
+        margin: 1rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.6rem;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .card {
+        width: 100%;
+    }
+
+    .btn {
+        font-size: 0.95rem;
+    }
+}

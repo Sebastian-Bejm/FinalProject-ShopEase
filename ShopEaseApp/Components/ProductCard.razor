@@ -2,7 +2,7 @@
 @using ShopEaseApp.Services
 @inject CartService CartService
 
-<div class="card shadow-sm mb-4" style="width: 18rem;">
+<div class="card shadow-sm mb-4">
     <div class="card-body">
         <h5 class="card-title text-primary fw-bold">@Product.Name</h5>
         <p class="card-text text-muted mb-1">Category: <span class="fw-semibold">@Product.Category</span></p>
@@ -10,7 +10,6 @@
         <button class="btn btn-outline-primary w-100" @onclick="AddToCart">Add to Cart</button>
     </div>
 </div>
-
 
 @code {
     [Parameter]
