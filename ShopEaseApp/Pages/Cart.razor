@@ -3,46 +3,41 @@
 @using ShopEaseApp.Services
 @inject CartService CartService
 
-<h3>Your Cart</h3>
+<h3 class="mb-4">Your Cart</h3>
 
-@if (!CartService.CartItems.Any()) {
+@if (!CartService.CartItems.Any())
+{
     <p>Your cart is empty.</p>
-} else {
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var group in CartService.CartItems.GroupBy(p => p.ProductID))
-                {
-                    var product = group.First();
-                    var quantity = group.Count();
-                    <tr>
-                        <td class="fw-semibold">@product.Name</td>
-                        <td>@product.Category</td>
-                        <td class="text-success">$@product.Price</td>
-                        <td>
-                            <input type="number" min="0" value="@quantity"
-                                @onchange="e => UpdateQuantity(product, e.Value?.ToString())"
-                                class="form-control form-control-sm" style="width: 80px;" />
-                        </td>
-                        <td>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-danger btn-sm" @onclick="() => RemoveOne(product.ProductID)">Remove One</button>
-                                <button class="btn btn-warning btn-sm" @onclick="() => PromptRemoveAll(product)">Remove All</button>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+}
+else
+{
+    <div class="cart-grid">
+        @foreach (var item in CartService.CartItems)
+        {
+            var product = item.Product;
+            var quantity = item.Quantity;
+            <div class="cart-item" @key="item.ProductID">
+                <div class="cart-item-header">
+                    <h5 class="fw-semibold">@product.Name</h5>
+                    <span class="text-muted">@product.Category</span>
+                </div>
+                <div class="cart-item-body">
+                    <div class="cart-detail">
+                        <strong>Price:</strong> <span class="text-success">$@product.Price</span>
+                    </div>
+                    <div class="cart-detail">
+                        <strong>Quantity:</strong>
+                        <input type="number" min="0" value="@quantity"
+                               @onchange="e => UpdateQuantity(item.ProductID, e.Value?.ToString())"
+                               class="form-control form-control-sm quantity-input" />
+                    </div>
+                    <div class="cart-actions">
+                        <button class="btn btn-danger btn-sm" @onclick="() => RemoveOne(product.ProductID)">Remove One</button>
+                        <button class="btn btn-warning btn-sm" @onclick="() => PromptRemoveAll(product)">Remove All</button>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 
     @if (showConfirmation && productToRemove != null)
@@ -71,7 +66,6 @@
                 </div>
             </div>
         </div>
-
     }
 
     <div class="mt-4 text-end">
@@ -91,11 +85,10 @@
 
     private void ConfirmRemoveAll() {
         if (productToRemove != null) {
-            CartService.SetProductQuantity(productToRemove, 0);
+            CartService.SetProductQuantity(productToRemove.ProductID, 0);
         }
         CloseConfirmation();
     }
-
 
     private void CloseConfirmation() {
         productToRemove = null;
@@ -107,14 +100,19 @@
         CartService.RemoveProduct(productId);
     }
 
-    private void UpdateQuantity(Product product, string? value) {
-        if (int.TryParse(value, out int quantity)) {
-            if (quantity == 0) {
-                productToRemove = product;
+    private void UpdateQuantity(int productId, string? value)
+    {
+        if (int.TryParse(value, out int quantity))
+        {
+            if (quantity == 0)
+            {
+                productToRemove = CartService.CartItems.FirstOrDefault(p => p.ProductID == productId).Product;
                 showConfirmation = true;
                 isQuantityZeroTriggered = true;
-            } else if (quantity > 0) {
-                CartService.SetProductQuantity(product, quantity);
+            }
+            else if (quantity > 0)
+            {
+                CartService.SetProductQuantity(productId, quantity);
             }
         }
     }

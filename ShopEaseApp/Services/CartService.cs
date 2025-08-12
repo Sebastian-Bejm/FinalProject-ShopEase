@@ -3,36 +3,58 @@ using ShopEaseApp.Models;
 namespace ShopEaseApp.Services;
 
 public class CartService {
-    private List<Product> cart = new();
+    private Dictionary<int, (Product Product, int Quantity)> cartItems = new();
 
-    public IReadOnlyList<Product> CartItems => cart;
+    public IEnumerable<(int ProductID, Product Product, int Quantity)> CartItems =>
+    cartItems.Select(kvp => (kvp.Key, kvp.Value.Product, kvp.Value.Quantity));
 
-    public void AddProduct(Product product) {
-        cart.Add(product);
+    public void AddProduct(Product product)
+    {
+        if (cartItems.ContainsKey(product.ProductID))
+        {
+            var (existingProduct, quantity) = cartItems[product.ProductID];
+            cartItems[product.ProductID] = (existingProduct, quantity + 1);
+        }
+        else
+        {
+            cartItems[product.ProductID] = (product, 1);
+        }
     }
 
     public void RemoveProduct(int productId) {
-        var product = cart.FirstOrDefault(p => p.ProductID == productId);
-        if (product != null) {
-            cart.Remove(product);
+        if (cartItems.ContainsKey(productId))
+        {
+            var (product, quantity) = cartItems[productId];
+            if (quantity > 1)
+            {
+                cartItems[productId] = (product, quantity - 1);
+            }
+            else
+            {
+                cartItems.Remove(productId);
+            }
         }
     }
 
-    public void SetProductQuantity(Product product, int quantity) {
-        cart.RemoveAll(p => p.ProductID == product.ProductID);
-
-        for (int i = 0; i < quantity; i++) {
-            cart.Add(new Product{
-                ProductID = product.ProductID,
-                Name = product.Name,
-                Price = product.Price,
-                Category = product.Category
-            });
+    public void SetProductQuantity(int productId, int quantity)
+    {
+        if (cartItems.ContainsKey(productId))
+        {
+            var existing = cartItems[productId].Product;
+            if (quantity <= 0)
+            {
+                cartItems.Remove(productId);
+            }
+            else
+            {
+                cartItems[productId] = (existing, quantity);
+            }
         }
     }
+
 
     public decimal CalculateTotal()
     {
-        return cart.Sum(p => p.Price);
+        return cartItems.Values.Sum(item => item.Product.Price * item.Quantity);
     }
 }
